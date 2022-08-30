@@ -9,7 +9,6 @@ import xlrd ## import xlrd for excel files, tab names
 
 #Section 1 Opened Kaggle dataset
 #Bring in tabs 
-'''
 tab1 = pd.read_excel('data/combined_aug.xlsx', sheet_name='aug_train')
 tab2 = pd.read_excel('data/combined_aug.xlsx', sheet_name='sample_submission')
 
@@ -18,14 +17,18 @@ tab2 = pd.read_excel('data/combined_aug.xlsx', sheet_name='sample_submission')
 data = requests.get('https://data.cms.gov/data-api/v1/dataset/b35c77ac-26e2-4320-91e1-ba71c4d7ff2c/data')
 data = data.json()
 data
-'''
+
 #Section 3
-from google.cloud import bigquery #Imported missing package
+#Imported missing package
+from google.cloud import bigquery 
+#Connect to bigquery and query the public dataset
 client = bigquery.Client.from_service_account_json('/Users/Sarah/-hha-data-ingestion-sarah/json1.json')
 bigquery1 = client.query("SELECT * FROM `chc-nih-chest-xray.nih_chest_xray.nih_chest_xray` LIMIT 100")
+#Get results and put into dataframe
 results = bigquery1.result()
 df = pd.DataFrame(results.to_dataframe())
 
+#Repeat for second public dataset
 bigquery2 = client.query("SELECT * FROM `bigquery-public-data.genomics_cannabis.MNPR01_201703` LIMIT 100")
 results = bigquery2.result()
 df2 = pd.DataFrame(results.to_dataframe())
